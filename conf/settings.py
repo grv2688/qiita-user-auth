@@ -119,3 +119,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# ログイン
+LOGIN_URL = 'account:login' # ログインのURLの設定
+LOGIN_REDIRECT_URL = 'account:top' #ログインが完了した後に遷移するURL
