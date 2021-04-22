@@ -1,8 +1,8 @@
-from .forms import LoginForm, SignupForm
+from .forms import LoginForm, SignupForm, UserUpdateForm
 from django.contrib.auth import get_user_model # ユーザーモデルの取得
 from django.contrib.auth.mixins import UserPassesTestMixin 
 from django.contrib.auth.views import LoginView, LogoutView
-from django.shortcuts import redirect
+from django.shortcuts import redirect, resolve_url
 from django.views import generic
 
 
@@ -62,3 +62,19 @@ class Signup(generic.CreateView):
 '''サインアップ完了'''
 class SignupDone(generic.TemplateView):
     template_name = 'account/signup_done.html'
+
+
+'''ユーザー登録情報の更新'''
+class UserUpdate(OnlyYouMixin, generic.UpdateView):
+    model = User
+    form_class = UserUpdateForm
+    template_name = 'account/user_form.html'
+
+    def get_success_url(self):
+        return resolve_url('account:my_page', pk=self.kwargs['pk'])
+
+    # contextデータ作成
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["process_name"] = "Update"
+        return context
