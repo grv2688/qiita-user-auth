@@ -1,8 +1,9 @@
-from .forms import LoginForm, SignupForm, UserUpdateForm
+from .forms import LoginForm, SignupForm, UserUpdateForm, MyPasswordChangeForm 
 from django.contrib.auth import get_user_model # ユーザーモデルの取得
 from django.contrib.auth.mixins import UserPassesTestMixin 
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView
 from django.shortcuts import redirect, resolve_url
+from django.urls import reverse_lazy # 遅延評価
 from django.views import generic
 
 
@@ -78,3 +79,21 @@ class UserUpdate(OnlyYouMixin, generic.UpdateView):
         context = super().get_context_data(**kwargs)
         context["process_name"] = "Update"
         return context
+
+
+'''パスワード変更'''
+class PasswordChange(PasswordChangeView):
+    form_class = MyPasswordChangeForm
+    success_url = reverse_lazy('account:password_change_done')
+    template_name = 'account/user_form.html'
+
+    # contextデータ作成
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["process_name"] = "Change Password"
+        return context
+
+
+'''パスワード変更完了'''
+class PasswordChangeDone(PasswordChangeDoneView):
+    template_name = 'account/password_change_done.html'

@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm # ユーザー認証のためのクラス／ユーザー登録のためのクラス／パスワード変更のためのクラス
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm # ユーザー認証のためのクラス／ユーザー登録のためのクラス／パスワード変更のためのクラス
 from django.contrib.auth import get_user_model # ユーザーモデルを取得するため
 
 
@@ -56,3 +56,13 @@ class UserUpdateForm(forms.ModelForm):
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
             field.widget.attrs['required'] = '' # 全フィールドを入力必須
+
+
+'''パスワード変更フォーム'''
+class MyPasswordChangeForm(PasswordChangeForm):
+    
+    # bootstrap4対応で、classを指定
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
